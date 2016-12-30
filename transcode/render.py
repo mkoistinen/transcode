@@ -4,34 +4,28 @@ from markdown2 import Markdown
 from docutils.core import  publish_parts
 
 
-def render_simple(text, cfg=None):
-    text = regex.url_re.sub(r'<a href="\g<0>">\g<0></a>', text)
-    lines = multiline_splitter.split(text)
+def render_simple(source, *args, **kwargs):
+    source = regex.url_re.sub(r'<a href="\g<0>">\g<0></a>', source)
+    lines = regex.multiline_splitter(source)
     return '\n'.join(['<p>{}</p>'.format(p) for p in lines])
 
 
-def render_markdown(source, cfg=None):
+def render_markdown(source, *args, **kwargs):
     return Markdown().convert(source)
 
 
-def render_restructuredtext(source, cfg=None):
+def render_restructuredtext(source, *args, **kwargs):
     result = publish_parts(source, writer_name='html4css1')
     return result['html_body']
 
 
-def render(source, format, cfg=None):
-    if format == conf.SIMPLE_TEXT_FORMAT:
-        result = render_simple(source, cfg)
-    elif format == conf.HTML_FORMAT:
-        result = source
-    elif format == conf.MARKDOWN_FORMAT:
-        result = render_markdown(source, cfg)
-    elif format == conf.RST_FROMAT:
-        result = render_restructuredtext(source, cfg)
-    else:
-        raise ValueError('Unknown format "{}"'.format(format))
+def render_html(source, *args, **kwargs):
+    return source
 
-    return result
+
+def render(source, format, cfg=None):
+    transcoder, args, kwargs = conf.get_transcoder(format, cfg)
+    return transcoder(source, *args, **kwargs)
 
 
 

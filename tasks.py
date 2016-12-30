@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 from invoke import task
 
 BUILDDIR = "build"
@@ -26,6 +27,11 @@ def pip_with_extra(ctx, cmd, *args, **kws):
 def clean(ctx):
     """Removes all the cache files"""
     ctx.run("find . -type d -name __pycache__ | xargs rm -rf")
+    ctx.run('rm -rf ./.cache')
+    builddir = os.path.join(__file__, BUILDDIR)
+    if os.path.exists(builddir):
+        print('Removing builddir {}'.format(builddir))
+        ctx.run('rm -rf {}'.format(builddir))
 
 
 @task
@@ -59,4 +65,6 @@ def test(ctx):
         ),
         pty=True
     )
+
+    ctx.run('open {}/coverage/index.html'.format(BUILDDIR))
 

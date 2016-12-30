@@ -1,3 +1,4 @@
+docutils
 coverage==4.2
 flake8==3.0.4
 pep8==1.7.0
