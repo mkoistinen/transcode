@@ -1,3 +1,4 @@
+import os
 import codecs
 from distutils.config import PyPIRCCommand
 from setuptools import setup, find_packages
