@@ -1,0 +1,36 @@
+build:
+  test:
+    image: python
+    commands:
+      - pip install invoke
+      - inv develop
+      - inv test
+  bundle:
+    image: python
+    commands:
+      - pip install invoke
+    when:
+      branch: devel
+
+notify:
+  slack:
+    webhook_url: https://hooks.slack.com/services/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
+    channel: ci
+    username: drone
+    template: >
+      Build <{{ system.link_url }}/{{ repo.full_name }}/{{ build.number }}|#{{ build.number }}>
+      (<{{ build.link_url }}|{{ truncate build.commit 8 }}>)
+      of *{{ repo.name }}@{{ build.branch }}*
+      by {{ build.author }} *{{ build.status }}*
+      in {{ duration build.started_at build.finished_at }}
+
+publish:
+  pypi:
+    repository: https://pypi.opentherapeutics.net/simple/
+    username: df0e1f093c9e414d94c609a83132611a
+    password: 9bc5309ddcf04522a8d1e00244de7b81
+    distributions:
+      - sdist
+      - bdist_wheel
+    when:
+      event: tag
