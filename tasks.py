@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import sys
 from invoke import task
 
 BUILDDIR = "build"
@@ -66,5 +67,6 @@ def test(ctx):
         pty=True
     )
 
-    ctx.run('open {}/coverage/index.html'.format(BUILDDIR))
+    if sys.platform == 'darwin':
+        ctx.run('open {}/coverage/index.html'.format(BUILDDIR))
 
