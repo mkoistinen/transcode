@@ -1,3 +1,2 @@
 include *.rst
 include requirements/*.txt
-prune tests
