@@ -1,2 +1,2 @@
 docutils
-markdown2==2.3.1
+markdown2>=2.3.1
